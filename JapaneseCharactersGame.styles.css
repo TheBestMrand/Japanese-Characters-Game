@@ -1,0 +1,60 @@
+/* /Layout/MainLayout.razor.rz.scp.css */
+/* /Pages/Home.razor.rz.scp.css */
+h1[b-5yihgfck9x] {
+    margin: 1% 0 0 0;
+    text-align: center;
+}
+
+.current-character[b-5yihgfck9x] {
+    margin: 30vh 0 0 49%;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+}
+
+.current-character h2[b-5yihgfck9x] {
+    margin: 0 0 0 0;
+}
+
+.current-character > h2 + h2[b-5yihgfck9x] {
+    position: absolute;
+    left: -150%;
+}
+
+.HiraganaContainer[b-5yihgfck9x] {
+    height: 15%;
+    width: 15%;
+    margin: 2% 0 0 0;
+    display: inline-block;
+    text-align: center;
+    position:relative;
+    float: right;
+}
+
+.HiraganaContainer > button[b-5yihgfck9x] {
+    height: 100%;
+    width: 100%;
+}
+
+.ChooseHiragana[b-5yihgfck9x] {
+    display: inline-block;
+    border: 1px solid white;
+    padding: 5px;
+    margin: 0 0 0 0;
+}
+
+.ChooseHiragana div[b-5yihgfck9x] {
+    margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+    h1[b-5yihgfck9x] {
+        margin: 5% 0 0 0;
+    }
+    
+    .HiraganaContainer[b-5yihgfck9x] {
+        width: 30%;
+        margin: 5%;
+    }
+    
+}
