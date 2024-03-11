@@ -17,7 +17,7 @@ This project is built using Blazor
 
 ### Live Demo
 
-You can access the live version of this project [here](https://yourusername.github.io/repository-name/). This GitHub Pages site is directly built from the repository, showcasing the app in action.
+You can access the live version of this project [here](https://thebestmrand.github.io/Japanese-Characters-Game/). This GitHub Pages site is directly built from the repository, showcasing the app in action.
 
 ### Planned Features
 
