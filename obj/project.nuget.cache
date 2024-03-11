@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "yESRCT/DgB+SiynBcjCkPbzVa0CVvCQacFtQyG/vqawrxXSBW1pXBv04+eTkIkWQNC32hJl5OdQFmkt0GDWdbQ==",
+  "dgSpecHash": "9GARetbtvYh0qvwdzOvYExV6/203kg36lfdOkT8FIFRouk54VjHEzeDhL6Ni7pLoApK5qZLWrvUGThMB+eauvw==",
   "success": true,
   "projectFilePath": "Z:\\Workshop\\Projects\\Personal\\Csharp\\JapaneseCharactersGame\\JapaneseCharactersGame.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\TheBe\\.nuget\\packages\\blazored.localstorage\\4.5.0\\blazored.localstorage.4.5.0.nupkg.sha512",
     "C:\\Users\\TheBe\\.nuget\\packages\\microsoft.aspnetcore.authorization\\8.0.2\\microsoft.aspnetcore.authorization.8.0.2.nupkg.sha512",
     "C:\\Users\\TheBe\\.nuget\\packages\\microsoft.aspnetcore.components\\8.0.2\\microsoft.aspnetcore.components.8.0.2.nupkg.sha512",
     "C:\\Users\\TheBe\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\8.0.2\\microsoft.aspnetcore.components.analyzers.8.0.2.nupkg.sha512",

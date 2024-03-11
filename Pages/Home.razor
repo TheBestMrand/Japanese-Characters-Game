@@ -1,7 +1,162 @@
 ﻿@page "/"
+@using JapaneseCharactersGame.ViewModel
+@using JapaneseCharactersGame.Model
+@using Blazored.LocalStorage
+@inject HomeViewModel HomeVm
+@inject IJSRuntime JsRuntime
+@inject ILocalStorageService LocalStorage
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Points: @_points <br/> Max: @_maxPoints </h1>
 
-Welcome to your new app.
+<div class="current-character">
+    <h2>@HomeVm.CurrentHiraganaCharacter</h2>
+    @if(_isIncorrect)
+    {
+        <h2>Incorrect: @HomeVm.CurrentHiraganaCharacter.AsInput</h2>
+    }
+</div>
+
+
+<div class="HiraganaContainer">
+    <button class="open" @onclick="() => { _open = !_open; }">Hiragana</button>
+    @if (_open)
+    {
+        foreach (var item in HomeVm.HiraganaCharacters)
+        {
+            <div class="ChooseHiragana">
+                <span>@item.Character</span>
+                <input type="checkbox" checked="@_isAllowed[item.Character]" @onchange="@(e => CheckboxChanged(item.Character, e.Value))"/>
+            </div>
+        }
+        
+        <button class="alert-danger" @onclick="@Clear">Clear</button>
+    }
+</div>
+
+@code {
+    private int _points = 0;
+    private int _maxPoints = 0;
+    private string _character = "a";
+    
+    private bool _open = false;
+    private bool _isIncorrect = false;
+
+    private string _currentInput = "";
+    
+    private Dictionary<string, bool> _isAllowed = new Dictionary<string, bool>();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _isAllowed = HomeVm.HiraganaCharacters.ToDictionary(x => x.Character, x => true);
+        
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _maxPoints = await LocalStorage.GetItemAsync<int>("maxPoints");
+        _isAllowed = await LocalStorage.GetItemAsync<Dictionary<string, bool>>("allowedCharacters") ?? _isAllowed;
+
+        foreach (var x in _isAllowed)
+        {
+            Console.WriteLine(x.Key + " " + x.Value);
+        }
+        
+        await AllowCharacter();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JsRuntime.InvokeVoidAsync("keyCapture.registerKeyEvents", DotNetObjectReference.Create(this));
+        }
+    }
+    
+    [JSInvokable]
+    public async Task OnKeyPress(string key)
+    {
+        if(key.Length > 1 || !char.IsLetter(key[0]))
+        {
+            Console.WriteLine("Not a valid key");
+            return;
+        }
+        if(HomeVm.CurrentHiraganaCharacter.AsInput == _currentInput + key)
+        {
+            Console.WriteLine("Correct");
+            _points++;
+            _currentInput = "";
+            _isIncorrect = false;
+            HomeVm.SetCurrentHiraganaCharacter();
+        }
+        else
+        {
+            if(_currentInput.Length < HomeVm.CurrentHiraganaCharacter.AsInput.Length)
+            {
+                _currentInput += key;
+                _isIncorrect = false;
+                Console.WriteLine("Not enough characters");
+                var current = HomeVm.CurrentHiraganaCharacter.AsInput.Substring(0, _currentInput.Length );
+                if(_currentInput != current)
+                {
+                    _isIncorrect = true;
+                    _points = 0;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Wrong");
+                _isIncorrect = true;
+                _currentInput = "";
+                _points = 0;
+            }
+        }
+        
+        if(_points > _maxPoints)
+        {
+            _maxPoints = _points;
+            await LocalStorage.SetItemAsync("maxPoints", _maxPoints);
+        }
+        
+        StateHasChanged();
+    }
+    
+    private async Task CheckboxChanged(string character, object isChecked)
+    {
+        if(bool.TryParse(isChecked.ToString(), out bool checkedValue))
+        {
+            _isAllowed[character] = checkedValue;
+            await AllowCharacter();
+        }
+    }
+
+
+    private async Task AllowCharacter()
+    {
+        _isIncorrect = false;
+        _points = 0;
+    
+        HomeVm.SetCurrentAllowedCharacters(_isAllowed.Where(x => x.Value).Select(x => x.Key).ToList());
+    
+        await SaveAllowedCharacters();
+        StateHasChanged();
+    }
+
+
+    private async Task SaveAllowedCharacters()
+    {
+        await LocalStorage.SetItemAsync("allowedCharacters", _isAllowed);
+    }
+
+    private async Task Clear()
+    {
+        Console.WriteLine("Clears");
+        _isAllowed = HomeVm.HiraganaCharacters.ToDictionary(x => x.Character, x => false);
+        await AllowCharacter();
+        await SaveAllowedCharacters(); 
+    }
+
+
+}
