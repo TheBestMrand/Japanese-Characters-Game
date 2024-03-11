@@ -1,0 +1,17 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-to-github-pages:
+    runs-on: ubuntu-latest
+    steps:
+       - uses: actions/checkout@v2
+       - name: Setup .NET Core SDK
+         uses: actions/setup-dotnet@v1
+         with:
+            dotnet-version: 8.02
+       - name: Publish .NET Core Project
+         run: dotnet publish BlazorGitHubPagesDemo.csproj -c Release -o release --nologo
